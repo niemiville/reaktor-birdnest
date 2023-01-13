@@ -1,0 +1,5 @@
+GET assignments.reaktor.com/birdnest/drones
+
+###
+
+GET assignments.reaktor.com/birdnest/pilots/SN-WyOOO_DxBq
