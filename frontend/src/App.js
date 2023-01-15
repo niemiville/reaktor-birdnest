@@ -1,23 +1,28 @@
-import logo from './logo.svg';
+
 import React, { useState, useEffect } from 'react'
 import './App.css';
-import { getAllDrones } from './services/services';
+import { getViolations } from './services/services';
 
 function App() {
-  const [drones, setDrones] = useState({})
+  const [violations, setViolations] = useState([])
 
   useEffect(() => {
     const interval = setInterval(() => {
-      getAllDrones().then(drones =>
-        setDrones(drones)
+      getViolations().then(violations =>
+        setViolations(violations)
       )  
-    }, 10000);
+    }, 5000);
     return () => clearInterval(interval);
   }, [])
-  
+
   return (
     <div>
       <h1>Birdnest</h1>
+      <ul>
+        {violations.map((v) => 
+          <li key={v.serialNumber}>{v.firstName} {v.lastName} {v.lastSeen} {v.closestDistanceToNest} {v.phoneNumber} {v.email}</li>
+        )}
+      </ul>
     </div>
   );
 }

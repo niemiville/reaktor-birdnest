@@ -1,17 +1,9 @@
 import axios from 'axios'
-const dronesUrl = 'http://localhost:3030/api/drones'
-const pilotUrl = 'http://localhost:3030/api/pilot'
+const violationsUrl = 'http://localhost:3030/api/violations'
 
-const getAllDrones = async () => {
-  const request = axios.get(dronesUrl)
-  const response = await request
-  return response
+const getViolations = async () => {
+  const violations = await axios.get(violationsUrl);
+  return violations.data;
 }
 
-const getPilotInfo = async (serialNumber) => {
-  const request = axios.get(`${pilotUrl}/${serialNumber}`)
-  const response = await request
-  return response
-}
-
-export { getAllDrones, getPilotInfo };
+export { getViolations };
