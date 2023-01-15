@@ -15,6 +15,8 @@ const GET_PILOT_LINK = process.env.GET_PILOT_LINK || 'https://assignments.reakto
 const originX = 250000.0;
 const originY = 250000.0;
 const NDZRadius = 100000.0;
+const INFO_PERSIST_TIME_MS = 2 * 60 * 1000; //10 * 60 * 1000
+var NDZViolators = []
 
 const requestLogger = (request, response, next) => {
   console.log('Method:', request.method)
@@ -26,7 +28,7 @@ const requestLogger = (request, response, next) => {
 
 app.use(requestLogger)
 
-async function getDrones() {
+const getDrones = async () => {
   try {
     const response = await axios.get(GET_DRONES_LINK);
 		return await parseStringPromise(response.data);
@@ -35,41 +37,73 @@ async function getDrones() {
   }
 }
 
-async function getPilotInfo(serialNumber) {
+const getPilotInfo = async (serialNumber) => {
   try {
-    const response = await axios.get(GET_PILOT_LINK + serialNumber);
-    return await parseStringPromise(response.data);
+    return await axios.get(GET_PILOT_LINK + serialNumber);
   } catch (error) {
     console.error(error);
   }
 }
-//getPilotInfo('SN-mozUMVHF3o')
-//getDrones()
+
 const getDistanceBetweenTwoPoints = (x1, y1, x2, y2) => {
   return Math.sqrt((x2 - x1)**2 + (y2 - y1)**2);
 }
 
 const getNDZViolators = async () => {
-  let droneData = await getDrones()
+  const droneData = await getDrones()
+  console.log(droneData.report.capture[0]['$'].snapshotTimestamp, NDZViolators.length)
   for(let drone of droneData.report.capture[0].drone){
     const distanceToNest = getDistanceBetweenTwoPoints(originX, originY, drone.positionX, drone.positionY)
-    let violation = false;
     if(distanceToNest <= NDZRadius){
-      violation = true;
+      const i = NDZViolators.findIndex(d => d.serialNumber === drone.serialNumber[0])
+      if (i > -1) {
+        NDZViolators[i].lastSeen = droneData.report.capture[0]['$'].snapshotTimestamp
+        if(NDZViolators[i].closestDistanceToNest > distanceToNest){
+          NDZViolators[i].closestDistanceToNest = distanceToNest
+        }
+      } else {
+        NDZViolators.push({
+          serialNumber: drone.serialNumber[0], 
+          lastSeen: droneData.report.capture[0]['$'].snapshotTimestamp,
+          closestDistanceToNest: distanceToNest
+          })
+        addViolatorInfo(drone.serialNumber[0])
+      }
     }
-    console.log(drone.serialNumber[0], distanceToNest, violation)
   }
 }
-getNDZViolators()
 
-app.get('/api/drones', (request, response) => {
-    //TODO
-  })
+const scanForViolators = () => {
+  const waitTime = 7500;
+  setTimeout(() => { getNDZViolators(); deleteOldViolators(); console.log(NDZViolators); scanForViolators()}, waitTime);
+}
+scanForViolators()
 
-app.get('/api/pilot/:serialNumber', (request, response) => {
-    //TODO
+const deleteOldViolators = () => {
+  for(let i = 0; i < NDZViolators.length; i++){
+    if((Date.parse(new Date) - Date.parse(NDZViolators[i].lastSeen)) > INFO_PERSIST_TIME_MS){
+      NDZViolators.splice(i, 1)
+    }
+  }
+}
+
+const addViolatorInfo = (serialNumber) => {
+  getPilotInfo(serialNumber).then((pilotInfo) => {
+    const i = NDZViolators.findIndex(violator => violator.serialNumber === serialNumber);
+    NDZViolators[i].firstName = pilotInfo.data.firstName;
+    NDZViolators[i].lastName = pilotInfo.data.lastName;
+    NDZViolators[i].phoneNumber = pilotInfo.data.phoneNumber;
+    NDZViolators[i].email = pilotInfo.data.email;
+  });
+}
+
+const manageViolators = () => {
+  //TODO
+}
+
+app.get('/api/violations', (request, response) => {
+  response.send(NDZViolators)
 })
-
 
 const unknownEndpoint = (request, response) => {
 response.status(404).send({ error: 'unknown endpoint' })
