@@ -1,0 +1,20 @@
+#root {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+td, th {
+    text-align: right;
+    padding-right: 10px;
+    padding-left: 10px;
+    padding-bottom: 5px;
+}
+
+th {
+    background-color: lightgray;
+}
+
+h1 {
+    text-align: center;
+}
