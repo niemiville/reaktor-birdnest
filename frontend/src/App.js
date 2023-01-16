@@ -19,13 +19,16 @@ function App() {
     <div>
       <h1>Birdnest No Drone Zone Violators</h1>
       <table>
-        <tr>
-          <th>Name</th>
-          <th>Last seen</th>
-          <th>Closest distance to the nest</th>
-          <th>Phone</th>
-          <th>Email</th>
-        </tr>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Last seen</th>
+            <th>Closest distance to the nest</th>
+            <th>Phone</th>
+            <th>Email</th>
+          </tr>
+        </thead>
+        <tbody>
           {violations.map((v) => 
             <tr key={v.serialNumber}>
               <td>{v.firstName} {v.lastName}</td> 
@@ -35,6 +38,7 @@ function App() {
               <td>{v.email}</td>
             </tr>
           )}
+        </tbody>
       </table>
     </div>
   );
