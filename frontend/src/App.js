@@ -4,7 +4,7 @@ import { getViolations } from './services/services';
 
 function App() {
   const [violations, setViolations] = useState([])
-  const DATA_REFRESH_INTERVAL = 10000;
+  const DATA_REFRESH_INTERVAL = 2000;
   
   useEffect(() => {
     getViolations().then(violations =>

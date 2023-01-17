@@ -15,7 +15,7 @@ const GET_PILOT_LINK = process.env.GET_PILOT_LINK || 'https://assignments.reakto
 const originX = 250000.0; //Birdnest coordinate X
 const originY = 250000.0; //Birdnest coordinate Y
 const NDZRadius = 100000.0; //No drone zone radius
-const REFRESH_INTERVAL = parseInt(process.env.REFRESH_INTERVAL, 10) || 10000; //How often data will be fetched from API.
+const REFRESH_INTERVAL = parseInt(process.env.REFRESH_INTERVAL, 10) || 2000; //How often data will be fetched from API.
 const INFO_PERSIST_TIME_MS = parseInt(process.env.INFO_PRESIST_TIME_MS, 10) || (10 * 60 * 1000); // Default 10 * 60 * 1000
 var NDZViolators = []
 
