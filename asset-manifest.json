@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/reaktor-birdnest/static/css/main.b2ff2b3c.css",
-    "main.js": "/reaktor-birdnest/static/js/main.0fbbc31e.js",
+    "main.js": "/reaktor-birdnest/static/js/main.7d5e915f.js",
     "static/js/787.cda612ba.chunk.js": "/reaktor-birdnest/static/js/787.cda612ba.chunk.js",
     "index.html": "/reaktor-birdnest/index.html",
     "main.b2ff2b3c.css.map": "/reaktor-birdnest/static/css/main.b2ff2b3c.css.map",
-    "main.0fbbc31e.js.map": "/reaktor-birdnest/static/js/main.0fbbc31e.js.map",
+    "main.7d5e915f.js.map": "/reaktor-birdnest/static/js/main.7d5e915f.js.map",
     "787.cda612ba.chunk.js.map": "/reaktor-birdnest/static/js/787.cda612ba.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.b2ff2b3c.css",
-    "static/js/main.0fbbc31e.js"
+    "static/js/main.7d5e915f.js"
   ]
 }
